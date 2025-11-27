@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>404 — Site Coming Soon</title>
+  <style>
+    /* Full black background and remove default link coloring */
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #000;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    /* Center content */
+    .wrap {
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .card {
+      max-width: 900px;
+      width: 100%;
+    }
+
+    h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: clamp(2.25rem, 6vw, 4.5rem);
+      letter-spacing: -0.02em;
+      font-weight: 700;
+    }
+
+    p.lead {
+      margin: 0;
+      font-size: clamp(1rem, 3.5vw, 1.5rem);
+      opacity: 0.95;
+    }
+
+    /* small helper so the message changes smoothly */
+    .message {
+      display: inline-block;
+      min-width: 12ch; /* avoid layout jump if messages vary a lot */
+      transition: opacity 220ms ease;
+    }
+
+    /* ensure links (if any) are white and not underlined by default */
+    a { color: #fff; text-decoration: none; }
+    a:focus, a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="main" aria-labelledby="title" aria-live="polite">
+      <h1 id="title">404 Error</h1>
+      <p class="lead">
+        <span id="message" class="message">Site will be done soon!</span>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Array of alternate messages (will be chosen randomly on each load/refresh)
+    const messages = [
+      "Site will be done soon!",
+      "We're working on it — check back shortly.",
+      "Under construction — come back later!",
+      "Good things take time. We'll be back soon.",
+      "Temporarily offline for improvements.",
+      "This page is taking a coffee break ☕",
+      "Pardon the dust — new updates incoming.",
+      "We're polishing the site — see you soon!",
+      "Almost ready. Thanks for your patience!",
+      "Page not found — but the site will be here soon."
+    ];
+
+    // choose a random message different from the default if possible
+    (function pickMessage() {
+      const el = document.getElementById('message');
+      if (!el) return;
+
+      // choose random index; try to avoid choosing same text as the default if possible
+      const defaultText = el.textContent.trim();
+      let idx = Math.floor(Math.random() * messages.length);
+
+      // if the default is present in the list and the random picks the same,
+      // try once to pick a different one so users see a change more often
+      if (messages[idx] === defaultText && messages.length > 1) {
+        const alt = (idx + 1 + Math.floor(Math.random() * (messages.length - 1))) % messages.length;
+        idx = alt;
+      }
+
+      // fade effect
+      el.style.opacity = 0;
+      setTimeout(() => {
+        el.textContent = messages[idx];
+        el.style.opacity = 1;
+      }, 160);
+    })();
+  </script>
+</body>
+</html>
